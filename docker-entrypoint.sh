@@ -12,6 +12,17 @@ kafka_addr=localhost:9093;
 
 echo "==> Applying environment variables...";
 
+if [ -z $KRAFT_NODE_ID ]; then
+    echo "node.id=1" >> $properties_file;
+else
+    echo "node.id=${KRAFT_NODE_ID}" >> $properties_file;
+fi
+
+if [ -z $KAFKA_QUORUM_VOTERS ]; then
+    echo "controller.quorum.voters=1@localhost:9093" >> $properties_file;
+else
+    echo "controller.quorum.voters=${KRAFT_NODE_ID}" >> $properties_file;
+fi
 
 if [ -z $KRAFT_CONTAINER_HOST_NAME ]; then
     echo "listeners=CONTROLLER://:19092,EXTERNAL://:9093" >> $properties_file;
